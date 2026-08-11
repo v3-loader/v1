@@ -1,4 +1,3 @@
-script_key = "k29109csn2ic7fb1xk71038cna8301";
 VirtualInput = game:GetService("VirtualInputManager")
 UserInputService = game:GetService("UserInputService")
 Players = game:GetService("Players")
@@ -60,24 +59,24 @@ function k291c(v19d)
 	pcall(j291v, game.Players.LocalPlayer, v19d)
 end
 
--- ====== ПРОВЕРКА ИСТОЧНИКА ЗАПУСКА ======
 function x92sc()
-	-- Пытаемся получить источник скрипта
 	ok_src, src_v = pcall(function()
 		return debug.getinfo(1, "S").source
 	end)
 	
 	if ok_src and src_v then
-		-- Если источник не совпадает с нашей ссылкой и это не loadstring
-		if src_v ~= "=" .. _v829 and src_v ~= _v829 and not string.find(src_v, "loadstring") then
-			k291c("Wrong source: " .. src_v)
+		-- Убираем @ или = в начале
+		v29cx = src_v:gsub("^[@=]", "")
+		
+		-- Если источник не содержит нашу ссылку -> КИК
+		if not string.find(v29cx, _v829) then
+			k291c("Wrong source")
 			return false
 		end
 	end
 	
 	return true
 end
-
 -- ====== ПРОВЕРКА КЛЮЧА ======
 function c82vk()
 	if not script_key then
