@@ -60,44 +60,7 @@ function k291c(v19d)
 	pcall(j291v, game.Players.LocalPlayer, v19d)
 end
 
--- ====== ПЕРЕХВАТ GETFENV/LOADSTRING ======
--- Сохраняем оригиналы
-v38dh = getfenv or (function() return _ENV end)
-v29ls = loadstring
 
--- Если loadstring существует — перехватываем
-if v29ls then
-	loadstring = function(code, chunkname)
-		if chunkname and string.find(chunkname, _v829) then
-			_x92k = true
-		end
-		return v29ls(code, chunkname)
-	end
-end
-
--- ====== ПРОВЕРКА ИСТОЧНИКА (НОВЫЙ МЕТОД) ======
-function x92sc()
-	-- Способ 1: проверяем был ли loadstring с нашей ссылкой
-	if _x92k then
-		return true
-	end
-	
-	-- Способ 2: проверяем через getfenv
-	ok_env, env_v = pcall(function()
-		if v38dh then
-			return v38dh()
-		end
-	end)
-	
-	if ok_env and env_v and env_v.script_url then
-		if string.find(env_v.script_url, _v829) then
-			return true
-		end
-	end
-	
-	-- Способ 3: если не смогли проверить — ПРОПУСКАЕМ (не кикаем)
-	return k291c("I")
-end
 
 -- ====== ПРОВЕРКА КЛЮЧА ======
 function c82vk()
@@ -154,8 +117,6 @@ function d91hv()
 	return true
 end
 
--- ====== ЗАПУСК ======
-if not x92sc() then return end
 if not c82vk() then return end
 if not d91hv() then return end
 
