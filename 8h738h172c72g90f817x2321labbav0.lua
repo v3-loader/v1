@@ -41,7 +41,7 @@ p_vs4aaa24cvhgrswee12dxa = {
 	}
 }
 
--- ТВОЯ ССЫЛКА НА СКРИПТ (замени на свою)
+-- ТВОЯ ССЫЛКА
 _v829 = "https://raw.githubusercontent.com/v3-loader/v1/refs/heads/main/8h738h172c72g90f817x2321labbav0.lua"
 
 _v381 = false
@@ -59,24 +59,38 @@ function k291c(v19d)
 	pcall(j291v, game.Players.LocalPlayer, v19d)
 end
 
+-- ====== ПРОВЕРКА ИСТОЧНИКА ======
 function x92sc()
-	ok_src, src_v = pcall(function()
-		return debug.getinfo(1, "S").source
-	end)
+	-- Пробуем разные уровни стека
+	v29cx = nil
 	
-	if ok_src and src_v then
-		-- Убираем @ или = в начале
-		v29cx = src_v:gsub("^[@=]", "")
+	for v92l = 1, 5 do
+		ok_src, src_v = pcall(function()
+			return debug.getinfo(v92l, "S")
+		end)
 		
-		-- Если источник не содержит нашу ссылку -> КИК
-		if not string.find(v29cx, _v829) then
-			k291c("Wrong source")
-			return false
+		if ok_src and src_v and src_v.source then
+			v29cx = src_v.source
+			-- Убираем @ или = в начале
+			v29cx = string.gsub(v29cx, "^[@=]", "")
+			
+			-- Если нашли нашу ссылку — всё ок
+			if string.find(v29cx, _v829) then
+				return true
+			end
 		end
 	end
 	
-	return true
+	-- Если debug вообще не работает — пропускаем проверку
+	if not v29cx then
+		return true
+	end
+	
+	-- Ссылка не найдена ни на одном уровне
+	k291c("Wrong source")
+	return false
 end
+
 -- ====== ПРОВЕРКА КЛЮЧА ======
 function c82vk()
 	if not script_key then
@@ -117,13 +131,11 @@ function d91hv()
 		.cnadu81820911398dxjan208128290
 		.hwids_b
 
-	-- Проверка бан-листа
 	if hwids_b_list and jv01(hwids_b_list, hwid_x) then
 		k291c("HWID banned")
 		return false
 	end
 
-	-- Проверка вайтлиста
 	if hwids_list and #hwids_list > 0 then
 		if not jv01(hwids_list, hwid_x) then
 			k291c("HWID not whitelisted")
@@ -134,7 +146,7 @@ function d91hv()
 	return true
 end
 
--- ====== ЗАПУСК ВСЕХ ПРОВЕРОК ======
+-- ====== ЗАПУСК ======
 if not x92sc() then return end
 if not c82vk() then return end
 if not d91hv() then return end
