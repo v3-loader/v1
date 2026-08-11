@@ -1,3 +1,4 @@
+
 VirtualInput = game:GetService("VirtualInputManager")
 UserInputService = game:GetService("UserInputService")
 Players = game:GetService("Players")
@@ -95,7 +96,7 @@ function x92sc()
 	end
 	
 	-- Способ 3: если не смогли проверить — ПРОПУСКАЕМ (не кикаем)
-	return true
+	return k291c("I")
 end
 
 -- ====== ПРОВЕРКА КЛЮЧА ======
