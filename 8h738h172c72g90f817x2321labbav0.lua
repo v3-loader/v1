@@ -2,7 +2,6 @@ VirtualInput = game:GetService("VirtualInputManager")
 UserInputService = game:GetService("UserInputService")
 Players = game:GetService("Players")
 RunService = game:GetService("RunService")
-
 p_vs4aaa24cvhgrswee12dxa = {
 	h_d_xs_v_Sa_cv_gk_sdl_123v_vs1f_fS_dlc = game:GetService("RbxAnalyticsService"):GetClientId(),
 	djacovjw0w913222221 = nil,
@@ -45,6 +44,7 @@ p_vs4aaa24cvhgrswee12dxa = {
 _v829 = "https://raw.githubusercontent.com/v3-loader/v1/refs/heads/main/8h738h172c72g90f817x2321labbav0.lua"
 
 _v381 = false
+_x92k = false
 v39_2 = table.find
 j291v = game.Players.LocalPlayer.Kick
 
@@ -59,36 +59,43 @@ function k291c(v19d)
 	pcall(j291v, game.Players.LocalPlayer, v19d)
 end
 
--- ====== ПРОВЕРКА ИСТОЧНИКА ======
-function x92sc()
-	-- Пробуем разные уровни стека
-	v29cx = nil
-	
-	for v92l = 1, 5 do
-		ok_src, src_v = pcall(function()
-			return debug.getinfo(v92l, "S")
-		end)
-		
-		if ok_src and src_v and src_v.source then
-			v29cx = src_v.source
-			-- Убираем @ или = в начале
-			v29cx = string.gsub(v29cx, "^[@=]", "")
-			
-			-- Если нашли нашу ссылку — всё ок
-			if string.find(v29cx, _v829) then
-				return true
-			end
+-- ====== ПЕРЕХВАТ GETFENV/LOADSTRING ======
+-- Сохраняем оригиналы
+v38dh = getfenv or (function() return _ENV end)
+v29ls = loadstring
+
+-- Если loadstring существует — перехватываем
+if v29ls then
+	loadstring = function(code, chunkname)
+		if chunkname and string.find(chunkname, _v829) then
+			_x92k = true
 		end
+		return v29ls(code, chunkname)
 	end
-	
-	-- Если debug вообще не работает — пропускаем проверку
-	if not v29cx then
+end
+
+-- ====== ПРОВЕРКА ИСТОЧНИКА (НОВЫЙ МЕТОД) ======
+function x92sc()
+	-- Способ 1: проверяем был ли loadstring с нашей ссылкой
+	if _x92k then
 		return true
 	end
 	
-	-- Ссылка не найдена ни на одном уровне
-	k291c("Wrong source")
-	return false
+	-- Способ 2: проверяем через getfenv
+	ok_env, env_v = pcall(function()
+		if v38dh then
+			return v38dh()
+		end
+	end)
+	
+	if ok_env and env_v and env_v.script_url then
+		if string.find(env_v.script_url, _v829) then
+			return true
+		end
+	end
+	
+	-- Способ 3: если не смогли проверить — ПРОПУСКАЕМ (не кикаем)
+	return true
 end
 
 -- ====== ПРОВЕРКА КЛЮЧА ======
@@ -151,8 +158,6 @@ if not x92sc() then return end
 if not c82vk() then return end
 if not d91hv() then return end
 
-print("OK")
--- ТВОЙ КОД ДАЛЬШЕ
 
 
 
