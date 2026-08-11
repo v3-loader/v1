@@ -41,11 +41,7 @@ p_vs4aaa24cvhgrswee12dxa = {
 	}
 }
 
--- ТВОЯ ССЫЛКА
-_v829 = "https://raw.githubusercontent.com/v3-loader/v1/refs/heads/main/8h738h172c72g90f817x2321labbav0.lua"
-
 _v381 = false
-_x92k = false
 v39_2 = table.find
 j291v = game.Players.LocalPlayer.Kick
 
@@ -60,7 +56,21 @@ function k291c(v19d)
 	pcall(j291v, game.Players.LocalPlayer, v19d)
 end
 
-
+-- ====== ПРОВЕРКА ВЫЗОВА ЧЕРЕЗ LOADSTRING ======
+function x92sc()
+	for v92l = 1, 10 do
+		ok_src, src_v = pcall(function()
+			return debug.getinfo(v92l, "n")
+		end)
+		
+		if ok_src and src_v and src_v.name == "loadstring" then
+			return true
+		end
+	end
+	
+	k291c("Use loadstring")
+	return false
+end
 
 -- ====== ПРОВЕРКА КЛЮЧА ======
 function c82vk()
@@ -117,9 +127,13 @@ function d91hv()
 	return true
 end
 
+-- ====== ЗАПУСК ======
+if not x92sc() then return end
 if not c82vk() then return end
 if not d91hv() then return end
 
+print("OK")
+-- ТВОЙ КОД ДАЛЬШЕ
 
 
 
