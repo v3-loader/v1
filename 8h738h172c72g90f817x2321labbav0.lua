@@ -43,7 +43,7 @@ p_vs4aaa24cvhgrswee12dxa = {
 }
 
 -- ТВОЯ ССЫЛКА НА СКРИПТ (замени на свою)
-_v829 = ""
+_v829 = "https://raw.githubusercontent.com/v3-loader/v1/refs/heads/main/8h738h172c72g90f817x2321labbav0.lua"
 
 _v381 = false
 v39_2 = table.find
